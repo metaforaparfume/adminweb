@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard — TennisPro</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;0,700;1,300&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+  <style>
+    /* Tambahan style cepat agar form input rapi */
+    .admin-form { display: flex; flex-direction: column; gap: 1rem; max-width: 500px; padding: 1.5rem; background: #1a1a1a; border: 1px solid #333; border-radius: 8px; margin-bottom: 2rem; color: #fff; }
+    .admin-form .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+    .admin-form input, .admin-form select { padding: 0.75rem; background: #222; border: 1px solid #444; color: #fff; border-radius: 4px; font-family: 'Barlow', sans-serif; }
+    .btn-submit-form { padding: 0.75rem; background: #e63946; border: none; color: white; font-weight: bold; cursor: pointer; border-radius: 4px; text-transform: uppercase; }
+    .btn-submit-form:hover { background: #d62828; }
+    .btn-approve { background: #2a9d8f; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 4px; cursor: pointer; margin-right: 0.3rem; }
+    .btn-reject { background: #e63946; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 4px; cursor: pointer; margin-right: 0.3rem; }
+    .btn-delete { background: #555; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 4px; cursor: pointer; }
+    .btn-approve:hover { background: #21867a; } .btn-reject:hover { background: #d62837; } .btn-delete:hover { background: #444; }
+    .flex-container { display: flex; gap: 2rem; flex-wrap: wrap; }
+    .flex-child { flex: 1; min-width: 300px; }
+  </style>
+</head>
+<body>
+
+  <aside class="sidebar">
+    <div class="brand">ADMIN<span>PRO</span></div>
+    
+    <ul class="menu">
+      <li class="menu-item active" onclick="switchPage('page-booking', this)">📅 Kelola Booking</li>
+      <li class="menu-item" onclick="switchPage('page-student', this)">👥 Data Student</li>
+      <li class="menu-item" onclick="switchPage('page-coach', this)">👨‍🏫 Jadwal Coach</li>
+      <li class="menu-item" onclick="switchPage('page-setting', this)">⚙️ Pengaturan</li>
+    </ul>
+
+    <div class="admin-profile">
+      <div class="avatar">A</div>
+      <div>
+        <strong>Super Admin</strong>
+        <small>Owner</small>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    
+    <div id="page-booking" class="admin-page">
+      <header class="top-bar">
+        <h2>Daftar Booking Masuk</h2>
+        <div class="stats-overview">
+          <div class="stat-box">
+            <span id="countPending">0</span>
+            <small>Menunggu Verifikasi</small>
+          </div>
+          <div class="stat-box">
+            <span id="countConfirmed">0</span>
+            <small>Dikonfirmasi</small>
+          </div>
+        </div>
+      </header>
+
+      <section class="table-container">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>ID/Nama</th>
+              <th>Tanggal & Sesi</th>
+              <th>Coach</th>
+              <th>Lapangan</th>
+              <th>Pembayaran</th>
+              <th>Status</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="adminTableBody">
+            <tr>
+              <td colspan="7" style="text-align: center; padding: 2rem; color: #777;">Memuat data...</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </div>
+
+    <div id="page-student" class="admin-page" style="display: none;">
+      <header class="top-bar">
+        <h2>Data Student Registered</h2>
+      </header>
+      <section class="table-container">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Nama Lengkap</th>
+              <th>Email</th>
+              <th>Tanggal Join</th>
+              <th>Status Member</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="studentTableBody">
+            <tr>
+              <td colspan="5" style="text-align: center; padding: 2rem; color: #777;">Memuat data student...</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </div>
+
+    <div id="page-coach" class="admin-page" style="display: none;">
+      <header class="top-bar">
+        <h2>Manajemen Jadwal Coach</h2>
+      </header>
+      
+      <div class="flex-container" style="padding: 0 1.5rem;">
+        <div class="flex-child">
+          <h3>+ Tambah Ketersediaan Sesi Coach</h3>
+          <form id="formAddCoach" class="admin-form">
+            <div class="form-group">
+              <label>Nama Pelatih (Coach)</label>
+              <input type="text" id="coachName" placeholder="Contoh: Coach Adi" required>
+            </div>
+            <div class="form-group">
+              <label>Hari Kerja</label>
+              <select id="coachDay" required>
+                <option value="Sabtu">Sabtu</option>
+                <option value="Minggu">Minggu</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Jam Sesi</label>
+              <input type="text" id="coachTime" placeholder="Contoh: 08:00 - 10:00" required>
+            </div>
+            <button type="submit" class="btn-submit-form">Simpan Jadwal</button>
+          </form>
+        </div>
+
+        <div class="flex-child" style="flex: 1.5;">
+          <h3>Daftar Sesi Aktif</h3>
+          <section class="table-container" style="margin: 0; padding: 0;">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Nama Coach</th>
+                  <th>Hari</th>
+                  <th>Jam Sesi</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="coachTableBody">
+                <tr>
+                  <td colspan="4" style="text-align: center; padding: 2rem; color: #777;">Belum ada jadwal coach.</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <div id="page-setting" class="admin-page" style="display: none;">
+      <header class="top-bar">
+        <h2>Pengaturan Aplikasi</h2>
+      </header>
+      <div style="padding: 0 1.5rem;">
+        <form id="formSettings" class="admin-form">
+          <h3>Konfigurasi Akademi</h3>
+          <div class="form-group">
+            <label>Nama Akademi</label>
+            <input type="text" id="settingAcademyName" value="TennisPro Academy">
+          </div>
+          <div class="form-group">
+            <label>Harga per Sesi (IDR)</label>
+            <input type="number" id="settingPrice" value="150000">
+          </div>
+          <div class="form-group">
+            <label>Nomor WhatsApp Admin (Info Pembayaran)</label>
+            <input type="text" id="settingWA" value="08123456789">
+          </div>
+          <button type="submit" class="btn-submit-form">Update Pengaturan</button>
+        </form>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    function switchPage(pageId, clickedElement) {
+      const allPages = document.querySelectorAll('.admin-page');
+      allPages.forEach(page => page.style.display = 'none');
+
+      const allMenus = document.querySelectorAll('.menu-item');
+      allMenus.forEach(menu => menu.classList.remove('active'));
+
+      document.getElementById(pageId).style.display = 'block';
+      if (clickedElement) clickedElement.classList.add('active');
+    }
+  </script>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+    import { getFirestore, collection, onSnapshot, query, orderBy, doc, updateDoc, deleteDoc, addDoc, setDoc, getDoc } 
+      from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCfXn-e9QbeByLPMghFro9kGYt5zESfWho",
+      authDomain: "tennisprov3.firebaseapp.com",
+      projectId: "tennisprov3",
+      storageBucket: "tennisprov3.firebasestorage.app",
+      messagingSenderId: "1094208207912",
+      appId: "1:1094208207912:web:10e58644d3f2ec44d3c91d"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    window.db = db;
+    window.collection = collection;
+    window.onSnapshot = onSnapshot;
+    window.query = query;
+    window.orderBy = orderBy;
+    window.doc = doc;
+    window.updateDoc = updateDoc;
+    window.deleteDoc = deleteDoc;
+    window.addDoc = addDoc;
+    window.setDoc = setDoc;
+    window.getDoc = getDoc;
+  </script>
+
+  <script src="admin.js"></script>
+
+</body>
+</html>
